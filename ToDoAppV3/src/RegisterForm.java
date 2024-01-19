@@ -3,41 +3,50 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class RegisterForm {
+public class RegisterForm extends JFrame {
     public void init() {
-        //Create the framee
-        JFrame frame = new JFrame("Register");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 300);
-        frame.setLocationRelativeTo(null);
-        frame.setResizable(false);
-        //Create the panel
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(0, 1));
-        panel.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
         //Create the font
         Font font = new Font("Arial", Font.PLAIN, 20);
         //Create the labels and text fields
        
-        JLabel labelRegister = new JLabel("Register");
-        labelRegister.setFont(font);
+        BigLabel labelRegister = new BigLabel("Register");
 
-        JLabel labelName = new JLabel("Name: ");
-        labelName.setFont(font);
+        SmallLabel labelName = new SmallLabel("Name: ");
+
         JTextField namee = new JTextField();
         namee.setFont(font);
 
-        JLabel labelUsername = new JLabel("Username: ");
-        labelUsername.setFont(font);
+        SmallLabel labelUsername = new SmallLabel("Username: ");
+
         JTextField userName = new JTextField();
         userName.setFont(font);
 
-        JLabel labelPassword = new JLabel("Password: ");
-        labelPassword.setFont(font);
+        SmallLabel labelPassword = new SmallLabel("Password: ");
+
         JPasswordField passWord = new JPasswordField();
         passWord.setFont(font);
 
+        //ToDoApp logo image 
+        ImageIcon logo = new ImageIcon("src/images/bg1.png");
+        JLabel logoLabel = new JLabel(logo) {
+            @Override
+            public void paintComponent(Graphics g) {
+                g.drawImage(logo.getImage(), 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        logoLabel.setPreferredSize(new Dimension(50, 200));
+        //Panel for the logo
+        JPanel logoPanel = new JPanel();
+        logoPanel.setLayout(new BorderLayout());
+        logoPanel.setBorder(BorderFactory.createEmptyBorder(10, 150, 5, 150));
+        logoPanel.setBackground(Color.WHITE);
+        logoPanel.add(logoLabel);
+
         //Add everything to the panel
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(0, 1));
+        panel.setBorder(BorderFactory.createEmptyBorder(1, 50, 30, 50));
+        panel.setBackground(Color.WHITE);
         panel.add(labelRegister);
         panel.add(labelName);
         panel.add(namee);
@@ -46,57 +55,63 @@ public class RegisterForm {
         panel.add(labelPassword);
         panel.add(passWord);
         //Create the buttons
-        JButton button = new JButton("Register");
-        button.setFont(font);
+        ButtonTemplate button = new ButtonTemplate("Register");
 
-        button.addActionListener(new ActionListener() {
+        button.onClick(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String name = namee.getText();
                 String username = userName.getText();
                 String password = String.valueOf(passWord.getPassword());
-            
-                    //Check if the username is already taken
-                    if (getUser(username) == null) {
-                        //If the username is not taken, register the user
-                        registerUser(username, password, name);
-                        //go back to login frame
-                        frame.dispose();
-                        LoginFormm login = new LoginFormm();
-                        login.init();
-                        
-                    } else {
-                        //If the username is taken, show an error message
-                        JOptionPane.showMessageDialog(null, "Username is already taken, please try again");
-                    }//End if-else
-                
-            }//End action performed
+
+                //Capitalize the first letter of the name
+                name = name.substring(0, 1).toUpperCase() + name.substring(1);
+
+                // Check if the username is already taken
+                if (getUser(username) == null) {
+                    // If the username is not taken, register the user
+                    registerUser(username, password, name);
+                    // Go back to login frame
+                    dispose();
+                    LoginFormm login = new LoginFormm();
+                    login.init();
+                } else {
+                    // If the username is taken, show an error message
+                    JOptionPane.showMessageDialog(null, "Username is already taken, please try again");
+                }
+            }// End action performed
         });//End button action listener
 
-        JButton button2 = new JButton("Back");
-        button2.setFont(font);
+        ButtonTemplate button2 = new ButtonTemplate("Back");
         
-        button2.addActionListener(new ActionListener() {
+        button2.onClick(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                frame.dispose();
+                dispose();
                 LoginFormm login = new LoginFormm();
                 login.init();
             }
         });
 
-         //Panel for the buttons
-         JPanel panel2 = new JPanel();
-         panel2.setLayout(new GridLayout(1, 2));
-         panel2.setBorder(BorderFactory.createEmptyBorder(0, 50, 30, 50));
-         panel2.add(button);
-         panel2.add(button2);
+        //Panel for the buttons
+        JPanel panel2 = new JPanel();
+        panel2.setLayout(new GridLayout(1, 2));
+        panel2.setBorder(BorderFactory.createEmptyBorder(0, 50, 30, 50));
+        panel2.setBackground(Color.WHITE);
+        panel2.add(button);
+        panel2.add(button2);
+
+        add(panel, BorderLayout.CENTER);
+        add(panel2, BorderLayout.SOUTH);
+        add(logoPanel, BorderLayout.NORTH);
        
-        //Show the frame
-        frame.add(panel, BorderLayout.CENTER);
-        frame.add(panel2, BorderLayout.SOUTH);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
+        //Frame settings
+        setTitle("Register");
+        setSize(550, 600);
+        setLocationRelativeTo(null);
+        setMinimumSize(new Dimension(550, 600));
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
 
     }//End init
     //Database settings to get a user from the database

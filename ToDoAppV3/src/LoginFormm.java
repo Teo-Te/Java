@@ -6,32 +6,47 @@ import javax.swing.*;
 public class LoginFormm extends JFrame {
     final private Font font = new Font("Serif", Font.PLAIN, 20);
     public void init() {
-        // Form Layoutt
-        JLabel labelLogin = new JLabel("Login Page", SwingConstants.CENTER);
-        labelLogin.setFont(font);
+        //ToDoApp logo image 
+        ImageIcon logo = new ImageIcon("src/images/bg1.png");
+        JLabel logoLabel = new JLabel(logo) {
+            @Override
+            public void paintComponent(Graphics g) {
+                g.drawImage(logo.getImage(), 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        logoLabel.setPreferredSize(new Dimension(50, 200));
+        //Panel for the logo
+        JPanel logoPanel = new JPanel();
+        logoPanel.setLayout(new BorderLayout());
+        logoPanel.setBorder(BorderFactory.createEmptyBorder(10, 150, 10, 150));
+        logoPanel.setBackground(Color.WHITE);
+        logoPanel.add(logoLabel);
+
+        //Login label
+        BigLabel labelLogin = new BigLabel("Login Page");
         //Username labels and text field
-        JLabel labelUsername = new JLabel("Username: ");
-        labelUsername.setFont(font);
+        SmallLabel labelUsername = new SmallLabel("Username: ");
+        //Username text field
         JTextField userName = new JTextField();
         userName.setFont(font);
         //Password labels and text field
-        JLabel labelPassword = new JLabel("Password: ");
-        labelPassword.setFont(font);
+        SmallLabel labelPassword = new SmallLabel("Password: ");
+
         JPasswordField passWord = new JPasswordField();
         passWord.setFont(font);
         //Add everything to a panel
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(0, 1));
-        panel.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 50, 30, 50));
+        panel.setBackground(Color.WHITE);
         panel.add(labelLogin);
         panel.add(labelUsername);
         panel.add(userName);
         panel.add(labelPassword);
         panel.add(passWord);
         //Register button
-        JButton buttonReg = new JButton("Register");
-        buttonReg.setFont(font);
-        buttonReg.addActionListener(new ActionListener() {
+        ButtonTemplate buttonReg = new ButtonTemplate("Register");
+        buttonReg.onClick(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 RegisterForm registerForm = new RegisterForm();
@@ -40,9 +55,8 @@ public class LoginFormm extends JFrame {
             }
         });
         //The Login button
-        JButton button = new JButton("Login");
-        button.setFont(font);
-        button.addActionListener(new ActionListener() {
+        ButtonTemplate button = new ButtonTemplate("Login");
+        button.onClick(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String username = userName.getText();
@@ -64,9 +78,8 @@ public class LoginFormm extends JFrame {
         });//End button action listener
 
         //Close button
-        JButton button2 = new JButton("Close");
-        button2.setFont(font);
-        button2.addActionListener(new ActionListener() {
+        ButtonTemplate button2 = new ButtonTemplate("Close");
+        button2.onClick(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
@@ -77,6 +90,7 @@ public class LoginFormm extends JFrame {
         JPanel panel2 = new JPanel();
         panel2.setLayout(new GridLayout(1, 3));
         panel2.setBorder(BorderFactory.createEmptyBorder(0, 50, 30, 50));
+        panel2.setBackground(Color.WHITE);
         panel2.add(button);
         panel2.add(button2);
         panel2.add(buttonReg);
@@ -84,11 +98,12 @@ public class LoginFormm extends JFrame {
         //Add panel to frame
         add(panel, BorderLayout.CENTER);
         add(panel2, BorderLayout.SOUTH);
+        add(logoPanel, BorderLayout.NORTH);
         //Frame settings
         setTitle("Login Page");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(600, 300);
-        setMinimumSize(new Dimension(300, 100));
+        setSize(550, 600);
+        setMinimumSize(new Dimension(550, 600));
         setLocationRelativeTo(null);
         setVisible(true);
     }//End init

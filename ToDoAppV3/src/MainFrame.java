@@ -6,34 +6,39 @@ public class MainFrame extends JFrame {
     final private Font font = new Font("Serif", Font.PLAIN, 20);
     
     public void init(Users user) {
-        //Dashboardd
-        JLabel labelDashboard = new JLabel("Dashboard", SwingConstants.CENTER);
-        labelDashboard.setFont(font);
+        //Background Image 
+        ImageIcon background = new ImageIcon("src/images/bg3.png");
+        JLabel bglabel = new JLabel(background) {
+            @Override
+            public void paintComponent(Graphics g) {
+                g.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+
+        //Dashboard
+        BigLabel labelDashboard = new BigLabel("Dashboard");
         //Welcome message
-        JLabel labelWelcome = new JLabel("Welcome " + user.name, SwingConstants.CENTER);
+        JLabel labelWelcome = new JLabel("<html>Welcome <font color='red'><b>" + user.name + "</b></font></html>", SwingConstants.CENTER);
         labelWelcome.setFont(font);
         //Buttons to navigate to other pages
-        JButton buttonInsert = new JButton("Insert Tasks");
-        buttonInsert.setFont(font);
-        buttonInsert.addActionListener((ActionListener) new ActionListener() {
+        ButtonTemplate buttonInsert = new ButtonTemplate("Insert Tasks");
+        buttonInsert.onClick(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 InsertTasks insertTasks = new InsertTasks();
                 insertTasks.init(user);
             }
         });
-        JButton buttonView = new JButton("View Tasks");
-        buttonView.setFont(font);
-        buttonView.addActionListener((ActionListener) new ActionListener() {
+        ButtonTemplate buttonView = new ButtonTemplate("View Tasks");
+        buttonView.onClick(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ViewTasks viewTasks = new ViewTasks();
                 viewTasks.init(user);
             }
         });
-        JButton buttonLogout = new JButton("Logout");
-        buttonLogout.setFont(font);
-        buttonLogout.addActionListener((ActionListener) new ActionListener() {
+        ButtonTemplate buttonLogout = new ButtonTemplate("Logout");
+        buttonLogout.onClick( new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 LoginFormm loginForm = new LoginFormm();
@@ -41,25 +46,32 @@ public class MainFrame extends JFrame {
                 dispose();
             }
         });
-        //Add everything to a panel
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(0, 1));
-        panel.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
-        panel.add(labelDashboard);
-        panel.add(labelWelcome);
-        panel.add(buttonInsert);
-        panel.add(buttonView);
-        panel.add(buttonLogout);
-        //Add the panel to the frame
-        add(panel);
+        ButtonTemplate buttonTrash = new ButtonTemplate("Trash");
+        buttonTrash.onClick(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ViewTrash viewTrash = new ViewTrash();
+                viewTrash.init(user);
+            }
+        });
+        //Add everything to the bglabel
+        bglabel.setLayout(new GridLayout(0, 1));
+        bglabel.setBorder(BorderFactory.createEmptyBorder(30, 100, 30, 100));
+        bglabel.add(labelDashboard);
+        bglabel.add(labelWelcome);
+        bglabel.add(buttonInsert);
+        bglabel.add(buttonView);
+        bglabel.add(buttonTrash);
+        bglabel.add(buttonLogout);
+        
         //Set the frame properties
+        setContentPane(bglabel);
         setTitle("Main Page");
-        setSize(400, 300);
+        setSize(500, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
     }//End init
-    
     
 }//End class
 

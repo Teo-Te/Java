@@ -3,27 +3,26 @@ import org.jdatepicker.JDatePicker;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
-
+import java.util.Date;
 
 public class InsertTasks extends JFrame {
     final private Font font = new Font("Serif", Font.PLAIN, 20);
     public void init(Users user){
         //Task label and text field
-        JLabel tasks = new JLabel("Insert new task: ");
-        tasks.setFont(font);
+        SmallLabel tasks = new SmallLabel("Insert new task: ");
+        
         JTextField newTask = new JTextField();
         newTask.setFont(font);
         //Due date label and text field
-        JLabel dueDate = new JLabel("Insert due date: ");
-        dueDate.setFont(font);
+        SmallLabel dueDate = new SmallLabel("Insert due date: ");
+
         JDatePicker jDatePicker1 = new JDatePicker();
         jDatePicker1.setFont(font);
         
         //Buttons
-        JButton insert = new JButton("Insert");
-        insert.setFont(font);
+        ButtonTemplate insert = new ButtonTemplate("Insert");
 
-        insert.addActionListener(new ActionListener(){
+        insert.onClick(new ActionListener(){
             @Override 
             public void actionPerformed(ActionEvent e){
                 String task = newTask.getText();
@@ -34,19 +33,25 @@ public class InsertTasks extends JFrame {
             }
         });
     
-        JButton back = new JButton("Back");
-        back.setFont(font);
-        back.addActionListener((ActionListener) new ActionListener() {
+        ButtonTemplate back = new ButtonTemplate("Back");
+        back.onClick((ActionListener) new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
             }
         });
 
+        //Show current date and time
+        JLabel date = new JLabel("" + new Date());
+        date.setFont(font);
+        
+
         //Add the labels and text fields to a panel
         JPanel panel1 = new JPanel();
         panel1.setLayout(new GridLayout(0, 1));
         panel1.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
+        panel1.setBackground(Color.WHITE);
+        panel1.add(date);
         panel1.add(tasks);
         panel1.add(newTask);
         panel1.add(dueDate);
@@ -55,6 +60,7 @@ public class InsertTasks extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(1, 2));
         panel.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
+        panel.setBackground(Color.WHITE);
         panel.add(insert);
         panel.add(back);
         
@@ -62,11 +68,12 @@ public class InsertTasks extends JFrame {
         add(panel, BorderLayout.SOUTH);
         add(panel1, BorderLayout.NORTH);
         //Set the frame properties
-         setTitle("Insert Tasks");
-         setSize(500, 300);
-         setLocationRelativeTo(null);
-         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-         setVisible(true);
+        setTitle("Insert Tasks");
+        setSize(500, 300);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBackground(Color.WHITE);
+        setVisible(true);
     }//End init
     //Database settingss
     public static void setTasks(String task, String duedate, String usn){
