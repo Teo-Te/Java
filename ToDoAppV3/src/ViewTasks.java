@@ -153,6 +153,7 @@ public class ViewTasks extends JFrame {
             conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
-        }
+        }//End try-catch
     }//end sendToTrash
+    
 }//End class

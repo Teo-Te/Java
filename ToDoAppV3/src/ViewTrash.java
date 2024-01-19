@@ -103,7 +103,7 @@ public class ViewTrash extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         setBackground(Color.WHITE);
-   }//end init
+   }//End init
    
    //Database settings for getting the tasks
     public void getTasks(DefaultTableModel model, String user_name) {
@@ -171,7 +171,7 @@ public class ViewTrash extends JFrame {
             conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-    }
+        }//End try-catch
+    }//End restoreTasks
     
-}
+}//End class
