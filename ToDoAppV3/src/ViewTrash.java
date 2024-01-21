@@ -10,7 +10,7 @@ public class ViewTrash extends JFrame {
 
     public void init(Users user) {
         //Username
-        String usn = user.username;
+        String usn = user.getUsername();
         //Create the table
         JTable table = new JTable();
         table.setFont(font);
@@ -36,7 +36,7 @@ public class ViewTrash extends JFrame {
         //Set the model
         table.setModel(model);
         //Get the tasks from the database to display in the table
-        getTasks(model, user.username);
+        getTasks(model, user.getUsername());
         //Create the buttons
         //Back button
         ButtonTemplate back = new ButtonTemplate("Back");

@@ -27,7 +27,7 @@ public class InsertTasks extends JFrame {
             public void actionPerformed(ActionEvent e){
                 String task = newTask.getText();
                 String duedate = jDatePicker1.getFormattedTextField().getText();
-                String usn = user.username;
+                String usn = user.getUsername();
                 
                 setTasks(task, duedate, usn);
             }

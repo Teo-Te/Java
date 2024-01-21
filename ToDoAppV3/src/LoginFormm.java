@@ -124,9 +124,9 @@ public class LoginFormm extends JFrame {
             //If the user exists, create a new user object
             if (result.next()) {
                 user = new Users();
-                user.name = result.getString("name");
-                user.username = result.getString("username");
-                user.password = result.getString("password");
+                user.setName(result.getString("name"));
+                user.setUsername(result.getString("username"));
+                user.setPassword(result.getString("password"));
                 
             }
             //Close the connection

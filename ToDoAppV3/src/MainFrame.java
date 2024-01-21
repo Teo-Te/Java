@@ -18,7 +18,7 @@ public class MainFrame extends JFrame {
         //Dashboard
         BigLabel labelDashboard = new BigLabel("Dashboard");
         //Welcome message
-        JLabel labelWelcome = new JLabel("<html>Welcome <font color='red'><b>" + user.name + "</b></font></html>", SwingConstants.CENTER);
+        JLabel labelWelcome = new JLabel("<html>Welcome <font color='red'><b>" + user.getName() + "</b></font></html>", SwingConstants.CENTER);
         labelWelcome.setFont(font);
         //Buttons to navigate to other pages
         ButtonTemplate buttonInsert = new ButtonTemplate("Insert Tasks");
