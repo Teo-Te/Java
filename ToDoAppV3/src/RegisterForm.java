@@ -145,7 +145,7 @@ public class RegisterForm extends JFrame {
     }//End getUser
     
     //Database settings to register a user
-    public static void registerUser(String username, String password, String name) {
+    public void registerUser(String username, String password, String name) {
         try {
             //Connect to the database
             Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo", "postgres", "arteofejzo");

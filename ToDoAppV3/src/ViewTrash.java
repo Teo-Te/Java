@@ -36,7 +36,7 @@ public class ViewTrash extends JFrame {
         //Set the model
         table.setModel(model);
         //Get the tasks from the database to display in the table
-        getTasks(model, user.getUsername());
+        getTasksTrash(model, user.getUsername());
         //Create the buttons
         //Back button
         ButtonTemplate back = new ButtonTemplate("Back");
@@ -57,7 +57,7 @@ public class ViewTrash extends JFrame {
             String duedate = table.getModel().getValueAt(row, 0).toString();
             String task = table.getModel().getValueAt(row, 1).toString();
             //Delete the task
-            deleteTask(duedate, task);
+            deleteTaskTrash(duedate, task);
             //Remove the row from the table
             model.removeRow(row);
             }
@@ -106,7 +106,7 @@ public class ViewTrash extends JFrame {
    }//End init
    
    //Database settings for getting the tasks
-    public void getTasks(DefaultTableModel model, String user_name) {
+    public void getTasksTrash(DefaultTableModel model, String user_name) {
         try {
             //Connect to the database
             Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo", "postgres", "arteofejzo");
@@ -133,7 +133,7 @@ public class ViewTrash extends JFrame {
     }//End getTaskss
   
     //Database settings for deleting a task
-    public void deleteTask(String duedate, String task) {
+    public void deleteTaskTrash(String duedate, String task) {
         try {
             //Connect to the database
             Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo", "postgres", "arteofejzo");

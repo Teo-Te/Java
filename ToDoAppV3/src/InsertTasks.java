@@ -76,7 +76,7 @@ public class InsertTasks extends JFrame {
         setVisible(true);
     }//End init
     //Database settingss
-    public static void setTasks(String task, String duedate, String usn){
+    public void setTasks(String task, String duedate, String usn){
         try {
             //connect to database
             Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo", "postgres", "arteofejzo");

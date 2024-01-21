@@ -138,7 +138,7 @@ public class ViewTasks extends JFrame {
     }//End deleteTask
 
     //Database settings for sending a task to trash
-    public static void sendToTrash(String task, String duedate, String usn){
+    public void sendToTrash(String task, String duedate, String usn){
         try {
             //connect to database
             Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo", "postgres", "arteofejzo");
