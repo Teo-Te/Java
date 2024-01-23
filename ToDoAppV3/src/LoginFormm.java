@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class LoginFormm extends JFrame {
+public class LoginFormm extends JFrame implements LoginOperations {
     final private Font font = new Font("Serif", Font.PLAIN, 20);
     public void init() {
         //ToDoApp logo image 
@@ -108,6 +108,7 @@ public class LoginFormm extends JFrame {
         setVisible(true);
     }//End init
     //Database settings
+    @Override
     public Users getUser(String username, String password) {
         Users user = null;
 

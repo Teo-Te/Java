@@ -1,9 +1,11 @@
 import java.sql.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class RegisterForm extends JFrame {
+public class RegisterForm extends JFrame implements RegisterOperations {
     public void init() {
         //Create the font
         Font font = new Font("Arial", Font.PLAIN, 20);
@@ -115,6 +117,7 @@ public class RegisterForm extends JFrame {
 
     }//End init
     //Database settings to get a user from the database
+    @Override
     public Users getUser(String username) {
         Users user = null;
 
@@ -145,6 +148,7 @@ public class RegisterForm extends JFrame {
     }//End getUser
     
     //Database settings to register a user
+    @Override
     public void registerUser(String username, String password, String name) {
         try {
             //Connect to the database
@@ -162,5 +166,49 @@ public class RegisterForm extends JFrame {
             e.printStackTrace();
         }//End try-catch
     }//End registerUser
+
+    @Override
+    public void validateUsername(String username) {
+        //Using the StringBuilder class to create a regex
+        //The common practice is to use String for the regex but it was required to use StringBuilder
+        StringBuilder regexBuilder = new StringBuilder("^");
+        //It will not accept lowercase and spaces
+        regexBuilder.append("[a-z]+");  
+        regexBuilder.append("$"); 
+        String regex = regexBuilder.toString();
+
+        if (username.matches(regex)) {
+            JOptionPane.showMessageDialog(null, "Username is valid", "Success", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "Username is not valid", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    @Override
+    public void validatePassword(String password) {
+        //Using the StringBuffer class to create a regex
+        StringBuffer regexBuffer = new StringBuffer("^");
+        regexBuffer.append("(?=.*[a-z])");  //Lowercase letter
+        regexBuffer.append("(?=.*[A-Z])");  //Uppercase letter
+        regexBuffer.append("(?=.*\\d)");     //Digit
+        regexBuffer.append("(?=\\S+$)");  //No spaces
+        regexBuffer.append(".{8,}");  //Minimum 8 characters
+        regexBuffer.append("$");
+
+        String regex = regexBuffer.toString();
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(password);
+
+        if (matcher.matches()) {
+            JOptionPane.showMessageDialog(null, "Password is valid", "Success", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "Password is not valid", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    @Override
+    public void validateName(String name) {
+        
+    }
     
 }//End class

@@ -63,12 +63,12 @@ class SalesOrder implements Payable {
         }
     }
 
-    @Override
+    
     public int getAmountToPay() {
         return total - discount;
     }
 
-    @Override
+    
     public String getDescription() {
         return "SalesOrder ID: " + id + ", Total: " + total + ", Discount: " + discount;
     }
