@@ -38,3 +38,17 @@ TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.users
     OWNER to postgres;
+
+CREATE TABLE IF NOT EXISTS public.trash
+(
+    trashid integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    duedate character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    task character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    user_name character varying(100) COLLATE pg_catalog."default",
+    CONSTRAINT trash_pkey PRIMARY KEY (trashid)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.trash
+    OWNER to postgres;

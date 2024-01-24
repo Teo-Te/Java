@@ -2,11 +2,12 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.sql.*;
 import java.util.Date;
 
 public class ViewTrash extends JFrame {
     private final Font font = new Font("Serif", Font.PLAIN, 20);
+    //DB Operations instance
+    DBOperations db = new DBOperations();
 
     public void init(Users user) {
         //Username
@@ -28,15 +29,15 @@ public class ViewTrash extends JFrame {
         //Add the scroll pane to the frame.
         add(scrollPane, BorderLayout.CENTER);
         //Create the column names
-        String columnNames[] = {"Due Date", "Task"};
+        String columnNames[] = {"Due Date", "Task", "Due Time"};
         //Create the data
-        String data[][] = new String[0][0];
+        String data[][][] = new String[0][0][0];
         //Create the table model
         DefaultTableModel model = new DefaultTableModel(data, columnNames);
         //Set the model
         table.setModel(model);
         //Get the tasks from the database to display in the table
-        getTasksTrash(model, user.getUsername());
+        db.getTasksTrash(model, user.getUsername());
         //Create the buttons
         //Back button
         ButtonTemplate back = new ButtonTemplate("Back");
@@ -52,12 +53,19 @@ public class ViewTrash extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
             //Get the selected row
-            int row = table.getSelectedRow();
+            int row = -1;
+            row = table.getSelectedRow();
+
+            // Check if a row is selected
+            if (row == -1) {
+                JOptionPane.showMessageDialog(null, "Please select a row.", "No Row Selected", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
             //Get the values from the selected row
             String duedate = table.getModel().getValueAt(row, 0).toString();
             String task = table.getModel().getValueAt(row, 1).toString();
             //Delete the task
-            deleteTaskTrash(duedate, task);
+            db.deleteTaskTrash(duedate, task);
             //Remove the row from the table
             model.removeRow(row);
             }
@@ -68,12 +76,20 @@ public class ViewTrash extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
             //Get the selected row
-            int row = table.getSelectedRow();
+            int row = -1;
+            row = table.getSelectedRow();
+
+            // Check if a row is selected
+            if (row == -1) {
+                JOptionPane.showMessageDialog(null, "Please select a row.", "No Row Selected", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
             //Get the values from the selected row
             String duedate = table.getModel().getValueAt(row, 0).toString();
             String task = table.getModel().getValueAt(row, 1).toString();
+            String time = table.getModel().getValueAt(row, 2).toString();
             //Delete the task
-            restoreTasks(task, duedate, usn);
+            db.restoreTasks(task, duedate, usn, time);
             //Remove the row from the table
             model.removeRow(row);
             }
@@ -104,74 +120,5 @@ public class ViewTrash extends JFrame {
         setVisible(true);
         setBackground(Color.WHITE);
    }//End init
-   
-   //Database settings for getting the tasks
-    public void getTasksTrash(DefaultTableModel model, String user_name) {
-        try {
-            //Connect to the database
-            Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo", "postgres", "arteofejzo");
-            //Create the statement
-            Statement statement = conn.createStatement();
-            //Create the query
-            String query = "SELECT * FROM trash WHERE user_name = '" + user_name + "'";
-            //Execute the query
-            ResultSet rs = statement.executeQuery(query);
-            //Loop through the results
-            while (rs.next()) {
-            //Get the values from the current row
-            String duedate = rs.getString("duedate");
-            String task = rs.getString("task");
-            //Add the values to the table
-            model.addRow(new Object[] {duedate, task});
-            }//End while
-            //Close the connection
-            statement.close();
-            conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }//End try-catch
-    }//End getTaskss
-  
-    //Database settings for deleting a task
-    public void deleteTaskTrash(String duedate, String task) {
-        try {
-            //Connect to the database
-            Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo", "postgres", "arteofejzo");
-            //Create the statement
-            Statement statement = conn.createStatement();
-            //Create the query
-            String query = "DELETE FROM trash WHERE duedate = '" + duedate + "' AND task = '" + task + "'";
-            //Execute the query
-            statement.executeUpdate(query);
-            //Show a message
-            JOptionPane.showMessageDialog(null, "Task deleted successfully!");
-            //Close the connection
-            statement.close();
-            conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }//End try-catch
-    }//End deleteTask
-
-   //Database settings for restoring a task
-   public static void restoreTasks(String task, String duedate, String usn){
-        try {
-            //connect to database
-            Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo", "postgres", "arteofejzo");
-            //Create the statement
-            Statement statement = conn.createStatement();
-            //Create the query
-            String sql = "INSERT INTO tasks (task, duedate, user_name) VALUES ('"+task+"', '"+duedate+"', '"+usn+"')";
-            //Execute the query
-            statement.executeUpdate(sql);
-            //Show a message
-            JOptionPane.showMessageDialog(null, "Task restored successfully!");
-            //Close the connection
-            statement.close();
-            conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }//End try-catch
-    }//End restoreTasks
     
 }//End class

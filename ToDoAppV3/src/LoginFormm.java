@@ -1,10 +1,13 @@
-import java.sql.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class LoginFormm extends JFrame implements LoginOperations {
+public class LoginFormm extends JFrame{
+    //Create the font
     final private Font font = new Font("Serif", Font.PLAIN, 20);
+    //DB Operation instance
+    DBOperations db = new DBOperations();
+
     public void init() {
         //ToDoApp logo image 
         ImageIcon logo = new ImageIcon("src/images/bg1.png");
@@ -61,8 +64,14 @@ public class LoginFormm extends JFrame implements LoginOperations {
             public void actionPerformed(ActionEvent e) {
                 String username = userName.getText();
                 String password = String.valueOf(passWord.getPassword());
+
+                //Validate the input
+                Validate validate = new Validate();
+                if (!validate.validateUsername(username) || !validate.validatePassword(password)){
+                    return;
+                }
                 //Get the user from the database
-                Users user = getUser(username, password);
+                Users user = db.getUser(username, password);
 
                 if (user != null) {
                     //If the user exists, open the main frame
@@ -108,37 +117,6 @@ public class LoginFormm extends JFrame implements LoginOperations {
         setVisible(true);
     }//End init
     //Database settings
-    @Override
-    public Users getUser(String username, String password) {
-        Users user = null;
-
-        try{
-            //Connect to the database
-            Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo", "postgres", "arteofejzo");
-            //Get the user from the database
-            String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
-            PreparedStatement statement = conn.prepareStatement(sql);
-            statement.setString(1, username);
-            statement.setString(2, password);
-            
-            ResultSet result = statement.executeQuery();
-            //If the user exists, create a new user object
-            if (result.next()) {
-                user = new Users();
-                user.setName(result.getString("name"));
-                user.setUsername(result.getString("username"));
-                user.setPassword(result.getString("password"));
-                
-            }
-            //Close the connection
-            statement.close(); 
-            conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }//End try-catch
-        return user;
-    }//End getUser
-    
 }//End class
 
 

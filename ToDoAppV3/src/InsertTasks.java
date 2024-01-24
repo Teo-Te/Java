@@ -7,6 +7,10 @@ import java.util.Date;
 
 public class InsertTasks extends JFrame {
     final private Font font = new Font("Serif", Font.PLAIN, 20);
+    //DB Operations instance
+    DBOperations db = new DBOperations();
+    //Validation instance
+    Validate validation = new Validate();
     public void init(Users user){
         //Task label and text field
         SmallLabel tasks = new SmallLabel("Insert new task: ");
@@ -14,10 +18,13 @@ public class InsertTasks extends JFrame {
         JTextField newTask = new JTextField();
         newTask.setFont(font);
         //Due date label and text field
-        SmallLabel dueDate = new SmallLabel("Insert due date: ");
+        SmallLabel dueDate = new SmallLabel("Insert due date and time: ");
 
         JDatePicker jDatePicker1 = new JDatePicker();
         jDatePicker1.setFont(font);
+
+        JTextField time = new JTextField();
+        time.setFont(font);
         
         //Buttons
         ButtonTemplate insert = new ButtonTemplate("Insert");
@@ -28,8 +35,21 @@ public class InsertTasks extends JFrame {
                 String task = newTask.getText();
                 String duedate = jDatePicker1.getFormattedTextField().getText();
                 String usn = user.getUsername();
+                String time1 = time.getText();
+                if (!validation.validateTime(time1)) {
+                    return;
+                } else if (task.equals("")) {
+                    JOptionPane.showMessageDialog(null, "Please enter a task");
+                    return;
+                } else if (duedate.equals("")) {
+                    JOptionPane.showMessageDialog(null, "Please enter a due date");
+                    return;
+                } else if (time1.equals("")) {
+                    JOptionPane.showMessageDialog(null, "Please enter a due time");
+                    return;
+                }
                 
-                setTasks(task, duedate, usn);
+                db.setTasks(task, duedate, usn, time1);
             }
         });
     
@@ -56,6 +76,7 @@ public class InsertTasks extends JFrame {
         panel1.add(newTask);
         panel1.add(dueDate);
         panel1.add(jDatePicker1);
+        panel1.add(time);
         //Add the buttons to a panel
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(1, 2));
@@ -69,30 +90,11 @@ public class InsertTasks extends JFrame {
         add(panel1, BorderLayout.NORTH);
         //Set the frame properties
         setTitle("Insert Tasks");
-        setSize(500, 300);
+        setSize(500, 350);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBackground(Color.WHITE);
         setVisible(true);
     }//End init
-    //Database settingss
-    public void setTasks(String task, String duedate, String usn){
-        try {
-            //connect to database
-            Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo", "postgres", "arteofejzo");
-            //Create the statement
-            Statement statement = conn.createStatement();
-            //Create the query
-            String sql = "INSERT INTO tasks (task, duedate, user_name) VALUES ('"+task+"', '"+duedate+"', '"+usn+"')";
-            //Execute the query
-            statement.executeUpdate(sql);
-            //Show a message
-            JOptionPane.showMessageDialog(null, "Task inserted successfully!");
-            //Close the connection
-            statement.close();
-            conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+
 }//End class
