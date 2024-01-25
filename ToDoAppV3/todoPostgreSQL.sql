@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS public.tasks
     duedate character varying(50) COLLATE pg_catalog."default" NOT NULL,
     task character varying(100) COLLATE pg_catalog."default" NOT NULL,
     user_name character varying(100) COLLATE pg_catalog."default",
+    duetime character varying(100) COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT tasks_pkey PRIMARY KEY (taskid)
 )
 
@@ -45,6 +46,7 @@ CREATE TABLE IF NOT EXISTS public.trash
     duedate character varying(50) COLLATE pg_catalog."default" NOT NULL,
     task character varying(100) COLLATE pg_catalog."default" NOT NULL,
     user_name character varying(100) COLLATE pg_catalog."default",
+    duetime character varying(100) COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT trash_pkey PRIMARY KEY (trashid)
 )
 

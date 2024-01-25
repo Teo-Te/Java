@@ -10,6 +10,7 @@ public interface DBInterface {
     public void deleteTask(String duedate, String task);
     public void sendToTrash(String task, String duedate, String usn, String time);
     public void updateTask(String currentTask, String currentDueDate, String currentDueTime, String updatedTask, String updatedDueDate, String usn, String updatedDueTime);
+    public boolean searchTasks(DefaultTableModel model, String user_name, String search);
     //Trash methods
     public void getTasksTrash(DefaultTableModel model, String user_name);
     public void deleteTaskTrash(String duedate, String task);

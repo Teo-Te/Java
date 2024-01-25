@@ -38,8 +38,37 @@ public class ViewTasks extends JFrame {
         //Set the model
         table.setModel(model);
         //Get the tasks from the database to display in the table
-        db.getTasks(model, user.getUsername());
-        //Create the buttons
+        db.getTasks(model, usn);
+
+        //Search bar
+        JTextField search = new JTextField();
+        search.setFont(font);
+        
+        ButtonTemplate searchButton = new ButtonTemplate("Search Task");
+        searchButton.addActionListener(new ActionListener() {
+          @Override
+          public void actionPerformed(ActionEvent e) {
+            String searchValue = search.getText();
+            //Check if searchValue is empty so as to reset the table
+            if (searchValue.equals("")) {
+              model.setRowCount(0);
+              db.getTasks(model, usn);
+              return;
+            }
+            
+            //Check if any matching tasks were found
+            if (!db.searchTasks(model, usn, searchValue)) {
+              JOptionPane.showMessageDialog(null, "No matching tasks found");
+              return;
+            }
+
+            //Clear the table
+            model.setRowCount(0);
+            //Get the tasks from the database to display in the table
+            db.searchTasks(model, usn, searchValue);
+          }
+        });
+        
         //Back button
         ButtonTemplate back = new ButtonTemplate("Back");
         back.addActionListener((ActionListener) new ActionListener() {
@@ -58,7 +87,7 @@ public class ViewTasks extends JFrame {
             int row = -1;
             row = table.getSelectedRow();
 
-            // Check if a row is selected
+            //Check if a row is selected
             if (row == -1) {
                 JOptionPane.showMessageDialog(null, "Please select a row.", "No Row Selected", JOptionPane.WARNING_MESSAGE);
                 return;
@@ -80,22 +109,22 @@ public class ViewTasks extends JFrame {
         update.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Get the selected row
+                //Get the selected row
                 int row = -1;
                 row = table.getSelectedRow();
 
-                // Check if a row is selected
+                //Check if a row is selected
                 if (row == -1) {
                     JOptionPane.showMessageDialog(null, "Please select a row.", "No Row Selected", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
 
-                // Get the current values from the selected row
+                //Get the values from the selected row
                 String dueDate = table.getValueAt(row, 0).toString();
                 String task = table.getValueAt(row, 1).toString();
                 String time = table.getValueAt(row, 2).toString();
 
-                // Show a dialog to get updated values
+                //Show input dialog to get updated values
                 String updatedDueDate = JOptionPane.showInputDialog("Enter updated due date:", dueDate);
                 if(!validation.validateDate(updatedDueDate)) {
                   return;
@@ -110,10 +139,10 @@ public class ViewTasks extends JFrame {
                   return;
                 }
                 
-                // Update the task in the database
+                //Update the task in the database
                 db.updateTask(task, dueDate, time,  updatedTask, updatedDueDate, usn, updatedTime);
 
-                // Update the values in the table
+                //Update the values in the table
                 table.setValueAt(updatedDueDate, row, 0);
                 table.setValueAt(updatedTask, row, 1);
             }
@@ -125,6 +154,26 @@ public class ViewTasks extends JFrame {
         date.setBackground(Color.WHITE);
         //Add the date label to the frame
         add(date, BorderLayout.NORTH);
+        //Add the search bar and button to a panel
+        //Create a panel with GridBagLayout
+        JPanel searchPanel = new JPanel(new GridBagLayout());
+        searchPanel.setBackground(Color.WHITE);
+        searchPanel.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
+        GridBagConstraints constraints = new GridBagConstraints();
+
+        //The search component to take 2/3 of the space
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.weightx = 2.0;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        searchPanel.add(search, constraints);
+
+        //The button to take 1/3 of the space
+        constraints.gridx = 1;
+        constraints.gridy = 0;
+        constraints.weightx = 1.0;
+        searchPanel.add(searchButton, constraints);
+
         //Add the buttons to a panel
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(1, 2));
@@ -135,11 +184,11 @@ public class ViewTasks extends JFrame {
         panel.add(update);
         //Add the panel to frame
         add(panel, BorderLayout.SOUTH);
-
+        add(searchPanel, BorderLayout.NORTH);
       
         //Set the frame properties
         setTitle("View Tasks");
-        setSize(800, 300);
+        setSize(800, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);

@@ -102,7 +102,7 @@ public class DBOperations implements DBInterface{
           //Create the statement
           Statement statement = conn.createStatement();
           //Create the query
-          String query = "SELECT * FROM tasks WHERE user_name = '" + user_name + "'";
+          String query = "SELECT * FROM tasks WHERE user_name = '" + user_name + "' ORDER BY duedate ASC, duetime ASC";
           //Execute the query
           ResultSet rs = statement.executeQuery(query);
           //Loop through the results
@@ -200,7 +200,7 @@ public class DBOperations implements DBInterface{
             //Create the statement
             Statement statement = conn.createStatement();
             //Create the query
-            String query = "SELECT * FROM trash WHERE user_name = '" + user_name + "'";
+            String query = "SELECT * FROM trash WHERE user_name = '" + user_name + "' ORDER BY duedate ASC, duetime ASC";
             //Execute the query
             ResultSet rs = statement.executeQuery(query);
             //Loop through the results
@@ -284,5 +284,40 @@ public class DBOperations implements DBInterface{
             JOptionPane.showMessageDialog(null, "Operation canceled!");
         }//End try-catch
     }//End setTasks
+
+    @Override
+    public boolean searchTasks(DefaultTableModel model, String user_name, String search) {
+        try {
+            // Connect to the database
+            Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo", "postgres", "arteofejzo");
+            //Create the statement
+            Statement statement = conn.createStatement();
+            //Create the query
+            String query = "SELECT * FROM tasks WHERE user_name = '" + user_name + "' AND task LIKE '%" + search + "%'";
+            //Execute the query
+            ResultSet rs = statement.executeQuery(query);
+            //Check if any task is found
+            if (!rs.next()) {
+                return false;
+            } else {
+                //Loop through the results
+                do {
+                    //Get the values from the current row
+                    String duedate = rs.getString("duedate");
+                    String task = rs.getString("task");
+                    String duetime = rs.getString("duetime");
+
+                    //Add the values to the table
+                    model.addRow(new Object[]{duedate, task, duetime});
+                } while (rs.next());
+            }
+            //Close the connection
+            statement.close();
+            conn.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Operation canceled!");
+        }//End try-catch
+        return true;
+    }//End searchTasks
 
 }
