@@ -19,7 +19,7 @@ public class DBOperations implements DBInterface{
         Users user = null;
 
         try{
-            //Connect to the database
+            //connect to the database
             Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo", "postgres", "arteofejzo");
             //Get the user from the database
             String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
@@ -49,7 +49,7 @@ public class DBOperations implements DBInterface{
         Users user = null;
 
         try{
-            //Connect to the database
+            //connect to the database
             Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo", "postgres", "arteofejzo");
             //Get the user from the database
             String sql = "SELECT * FROM users WHERE username = ?";
@@ -78,7 +78,7 @@ public class DBOperations implements DBInterface{
     @Override
     public void registerUser(String username, String password, String name) {
         try {
-            //Connect to the database
+            //connect to the database
             Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo", "postgres", "arteofejzo");
             //Create the statement
             Statement statement = conn.createStatement();
@@ -97,7 +97,7 @@ public class DBOperations implements DBInterface{
     @Override
     public void getTasks(DefaultTableModel model, String user_name) {
         try {
-          //Connect to the database
+          //connect to the database
           Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo", "postgres", "arteofejzo");
           //Create the statement
           Statement statement = conn.createStatement();
@@ -126,7 +126,7 @@ public class DBOperations implements DBInterface{
     @Override
     public void deleteTask(String duedate, String task) {
         try {
-          //Connect to the database
+          //connect to the database
           Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo", "postgres", "arteofejzo");
           //Create the statement
           Statement statement = conn.createStatement();
@@ -169,22 +169,22 @@ public class DBOperations implements DBInterface{
     public void updateTask(String currentTask, String currentDueDate, String currentDueTime, 
     String updatedTask, String updatedDueDate, String usn, String updatedDueTime) {
         try {
-            // Connect to the database
+            //connect to the database
             Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo", "postgres", "arteofejzo");
 
-            // Create the query
+            //Create the query
             String sql = "UPDATE tasks SET task = ?, duedate = ?, duetime = ? WHERE user_name = ?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
-            // Set parameters to avoid SQL injection
-            preparedStatement.setString(1, updatedTask);
-            preparedStatement.setString(2, updatedDueDate);
-            preparedStatement.setString(3, updatedDueTime);
-            preparedStatement.setString(4, usn);
-            // Execute the query
-            preparedStatement.executeUpdate();
+            PreparedStatement statement = conn.prepareStatement(sql);
+            //Set parameters to avoid SQL injection
+            statement.setString(1, updatedTask);
+            statement.setString(2, updatedDueDate);
+            statement.setString(3, updatedDueTime);
+            statement.setString(4, usn);
+            //Execute the query
+            statement.executeUpdate();
             
-
-            // Close the connection
+            //Close the connection
+            statement.close();
             conn.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Operation canceled!");
@@ -195,7 +195,7 @@ public class DBOperations implements DBInterface{
      @Override
      public void getTasksTrash(DefaultTableModel model, String user_name) {
         try {
-            //Connect to the database
+            //connect to the database
             Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo", "postgres", "arteofejzo");
             //Create the statement
             Statement statement = conn.createStatement();
@@ -224,7 +224,7 @@ public class DBOperations implements DBInterface{
     @Override
     public void deleteTaskTrash(String duedate, String task) {
         try {
-            //Connect to the database
+            //connect to the database
             Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo", "postgres", "arteofejzo");
             //Create the statement
             Statement statement = conn.createStatement();
@@ -288,7 +288,7 @@ public class DBOperations implements DBInterface{
     @Override
     public boolean searchTasks(DefaultTableModel model, String user_name, String search) {
         try {
-            // Connect to the database
+            //connect to the database
             Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo", "postgres", "arteofejzo");
             //Create the statement
             Statement statement = conn.createStatement();
@@ -320,4 +320,130 @@ public class DBOperations implements DBInterface{
         return true;
     }//End searchTasks
 
-}
+    @Override
+    public void updateUser(String name, String username, String password, String usn){
+        try {
+            //connect to the database
+            Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo", "postgres", "arteofejzo");
+
+            //Create the query
+            String sql = "UPDATE users SET name = ?, username = ?, password = ? WHERE username = ?";
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, name);
+            statement.setString(2, username);
+            statement.setString(3, password);
+            statement.setString(4, usn);
+            //Execute the query
+            statement.executeUpdate();
+
+            //Close the connection
+            statement.close();
+            conn.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Operation canceled!");
+        }
+    }//End updateUser
+
+    @Override
+    public void deleteUser(String usn){
+        try {
+            //connect to the database
+            Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo", "postgres", "arteofejzo");
+            //Create the query
+            String sql = "DELETE FROM users WHERE username = ?";
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, usn);
+            //Execute the query
+            statement.executeUpdate();
+
+            //Close the connection
+            statement.close();
+            conn.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Operation canceled!");
+        }
+    }//End deleteUser
+
+    @Override
+    public void deleteAllTasks(String usn){
+        try {
+            //connect to the database
+            Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo", "postgres", "arteofejzo");
+            //Create the query
+            String sql = "DELETE FROM tasks WHERE user_name = ?";
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, usn);
+            //Execute the query
+            statement.executeUpdate();
+
+            //Close the connection
+            statement.close();
+            conn.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Operation canceled!");
+        }
+    }//End deleteAllTasks
+
+    @Override
+    public void deleteAllTasksTrash(String usn){
+        try {
+            //connect to the database
+            Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo", "postgres", "arteofejzo");
+            //Create the query
+            String sql = "DELETE FROM trash WHERE user_name = ?";
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, usn);
+            //Execute the query
+            statement.executeUpdate();
+
+            //Close the connection
+            statement.close();
+            conn.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Operation canceled!");
+        }
+    }//End deleteAllTasksTrash
+
+    @Override
+    public void updateTaskUser(String oldUsn, String newUsn){
+       try {
+           //connect to the database
+           Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo", "postgres", "arteofejzo");
+           //Create the query
+           String sql = "UPDATE tasks SET user_name = ? WHERE user_name = ?";
+           PreparedStatement statement = conn.prepareStatement(sql);
+           statement.setString(1, newUsn);
+           statement.setString(2, oldUsn);
+           //Execute the query
+           statement.executeUpdate();
+
+           //Close the connection
+           statement.close();
+           conn.close();
+       } catch (SQLException e) {
+           JOptionPane.showMessageDialog(null, "Operation canceled!");
+       }
+    }//End updateTaskUser
+
+    @Override
+    public void updateTaskTrash(String oldUsn, String newUsn){
+       try {
+           //connect to the database
+           Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo", "postgres", "arteofejzo");
+           //Create the query
+           String sql = "UPDATE trash SET user_name = ? WHERE user_name = ?";
+           PreparedStatement statement = conn.prepareStatement(sql);
+           statement.setString(1, newUsn);
+           statement.setString(2, oldUsn);
+           //Execute the query
+           statement.executeUpdate();
+
+           //Close the connection
+           statement.close();
+           conn.close();
+       } catch (SQLException e) {
+           JOptionPane.showMessageDialog(null, "Operation canceled!");
+       }
+    }//End updateTaskTrash
+
+}//End class

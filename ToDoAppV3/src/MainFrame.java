@@ -38,7 +38,7 @@ public class MainFrame extends JFrame {
             }
         });
         ButtonTemplate buttonLogout = new ButtonTemplate("Logout");
-        buttonLogout.onClick( new ActionListener() {
+        buttonLogout.onClick(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 LoginFormm loginForm = new LoginFormm();
@@ -54,6 +54,15 @@ public class MainFrame extends JFrame {
                 viewTrash.init(user);
             }
         });
+        ButtonTemplate buttonUser = new ButtonTemplate("Manage your account");
+        buttonUser.onClick(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ManageUser manageUser = new ManageUser();
+                manageUser.init(user);
+                dispose();
+            }
+        });
         //Add everything to the bglabel
         bglabel.setLayout(new GridLayout(0, 1));
         bglabel.setBorder(BorderFactory.createEmptyBorder(30, 100, 30, 100));
@@ -62,6 +71,7 @@ public class MainFrame extends JFrame {
         bglabel.add(buttonInsert);
         bglabel.add(buttonView);
         bglabel.add(buttonTrash);
+        bglabel.add(buttonUser);
         bglabel.add(buttonLogout);
         
         //Set the frame properties

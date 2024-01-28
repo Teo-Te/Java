@@ -17,5 +17,11 @@ public interface DBInterface {
     public void restoreTasks(String task, String duedate, String usn, String time);
     //Insert methods
     public void setTasks(String task, String duedate, String usn, String time);
-
+    //Manage user methods
+    public void updateUser(String name, String username, String password, String usn);
+    public void deleteUser(String usn);
+    public void deleteAllTasks(String usn);
+    public void deleteAllTasksTrash(String usn);
+    public void updateTaskUser(String oldUsn, String newUsn);
+    public void updateTaskTrash(String oldUsn, String newUsn);
 }

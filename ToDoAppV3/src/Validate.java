@@ -49,7 +49,7 @@ public class Validate implements ValidatorInterface {
     }
 
     public boolean validateName(String name) {
-        String regex = "^[a-zA-Z]+$";
+        String regex = "^[a-zA-Z\\s]+$";
 
         //Create the pattern and matcher
         Pattern pattern = Pattern.compile(regex);

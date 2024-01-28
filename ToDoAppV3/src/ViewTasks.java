@@ -27,8 +27,6 @@ public class ViewTasks extends JFrame {
         table.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
         //Create the scroll pane and add the table to it.
         JScrollPane scrollPane = new JScrollPane(table);
-        //Add the scroll pane to the frame.
-        add(scrollPane, BorderLayout.CENTER);
         //Create the column names
         String columnNames[] = {"Due Date", "Task", "Time"};
         //Create the data
@@ -43,7 +41,19 @@ public class ViewTasks extends JFrame {
         //Search bar
         JTextField search = new JTextField();
         search.setFont(font);
-        
+
+        //Message
+        SmallLabel message = new SmallLabel("*Leave the search bar blank to reset the table and click the button");
+        message.setForeground(Color.RED);
+        message.setHorizontalAlignment(SwingConstants.CENTER);
+
+        //Show current date and time
+        JLabel date = new JLabel("Current date and time: " + new Date());
+        date.setFont(font);
+        date.setBackground(Color.WHITE);
+        date.setHorizontalAlignment(SwingConstants.CENTER);
+
+        //Search button
         ButtonTemplate searchButton = new ButtonTemplate("Search Task");
         searchButton.addActionListener(new ActionListener() {
           @Override
@@ -59,6 +69,8 @@ public class ViewTasks extends JFrame {
             //Check if any matching tasks were found
             if (!db.searchTasks(model, usn, searchValue)) {
               JOptionPane.showMessageDialog(null, "No matching tasks found");
+              model.setRowCount(0);
+              db.getTasks(model, usn);
               return;
             }
 
@@ -66,6 +78,7 @@ public class ViewTasks extends JFrame {
             model.setRowCount(0);
             //Get the tasks from the database to display in the table
             db.searchTasks(model, usn, searchValue);
+            search.setText("");
           }
         });
         
@@ -148,12 +161,13 @@ public class ViewTasks extends JFrame {
             }
         });
 
-        //Show current date and time
-        JLabel date = new JLabel("Current date and time: " + new Date());
-        date.setFont(font);
-        date.setBackground(Color.WHITE);
-        //Add the date label to the frame
-        add(date, BorderLayout.NORTH);
+        //Panel for the date and message labels
+        JPanel dm = new JPanel();
+        dm.setLayout(new GridLayout(0, 1));
+        dm.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
+        dm.setBackground(Color.WHITE);
+        dm.add(date);
+        dm.add(message);
         //Add the search bar and button to a panel
         //Create a panel with GridBagLayout
         JPanel searchPanel = new JPanel(new GridBagLayout());
@@ -182,13 +196,23 @@ public class ViewTasks extends JFrame {
         panel.add(back);
         panel.add(delete);
         panel.add(update);
-        //Add the panel to frame
+
+        //North panel
+        JPanel northPanel = new JPanel();
+        northPanel.setLayout(new GridLayout(0, 1));
+        northPanel.setBorder(BorderFactory.createEmptyBorder(5, 50, 5, 50));
+        northPanel.setBackground(Color.WHITE);
+        northPanel.add(dm);
+        northPanel.add(searchPanel);
+
+        //Add the panels to frame
+        add(northPanel, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.CENTER);
         add(panel, BorderLayout.SOUTH);
-        add(searchPanel, BorderLayout.NORTH);
-      
+
         //Set the frame properties
         setTitle("View Tasks");
-        setSize(800, 400);
+        setSize(800, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);

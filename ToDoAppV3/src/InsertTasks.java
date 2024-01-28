@@ -2,7 +2,6 @@ import javax.swing.*;
 import org.jdatepicker.JDatePicker;
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.*;
 import java.util.Date;
 
 public class InsertTasks extends JFrame {
