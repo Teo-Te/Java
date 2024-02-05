@@ -1,6 +1,5 @@
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.swing.JOptionPane;
 
 public class Validate implements ValidatorInterface {
@@ -8,7 +7,7 @@ public class Validate implements ValidatorInterface {
         //Using the StringBuilder class to create a regex
         //The common practice is to use String for the regex but it was required to use StringBuilder
         StringBuilder regexBuilder = new StringBuilder("^");
-        //It will not accept lowercase and spaces
+        //It will only accept lowercase letters
         regexBuilder.append("[a-z]+");  
         regexBuilder.append("$"); 
         String regex = regexBuilder.toString();
@@ -20,7 +19,7 @@ public class Validate implements ValidatorInterface {
         if (matcher.matches()) {
             return true;
         } else {
-            JOptionPane.showMessageDialog(null, "Username is not valid", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Username is not valid (only lowercase letters are allowed)", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }
@@ -43,12 +42,13 @@ public class Validate implements ValidatorInterface {
         if (matcher.matches()) {
             return true;
         } else {
-            JOptionPane.showMessageDialog(null, "Password is not valid", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Password is not valid (1 lowercase, 1 uppercase, 1 digit, no spaces, min 8 characters)", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }
 
     public boolean validateName(String name) {
+        //It will only accept letters and spaces
         String regex = "^[a-zA-Z\\s]+$";
 
         //Create the pattern and matcher
@@ -58,7 +58,7 @@ public class Validate implements ValidatorInterface {
         if (matcher.matches()) {
             return true;
         } else {
-            JOptionPane.showMessageDialog(null, "Name is not valid", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Name is not valid (Can only contain letters and spaces)", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }
@@ -73,7 +73,7 @@ public class Validate implements ValidatorInterface {
         if (matcher.matches()) {
             return true;
         } else {
-            JOptionPane.showMessageDialog(null, "Time is not in valid, hh:mm", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Time is not in valid, (hh:mm)", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }
@@ -88,7 +88,7 @@ public class Validate implements ValidatorInterface {
         if (matcher.matches()) {
             return true;
         } else {
-            JOptionPane.showMessageDialog(null, "Date is not valid, mmm dd yyyy", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Date is not valid, (mmm dd yyyy)", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }
