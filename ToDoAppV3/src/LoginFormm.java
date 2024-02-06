@@ -9,6 +9,10 @@ public class LoginFormm extends JFrame{
     DBOperations db = new DBOperations();
 
     public void init() {
+        //Create the local files
+        createLocalFiles();
+        //Show number of runs
+        System.out.println("Number of runs: " + numberOfRuns());
         //ToDoApp logo image 
         ImageIcon logo = new ImageIcon("src/images/bg1.png");
         JLabel logoLabel = new JLabel(logo) {
@@ -116,6 +120,23 @@ public class LoginFormm extends JFrame{
         setLocationRelativeTo(null);
         setVisible(true);
     }//End init
+
+    public void createLocalFiles() {
+        //Create the local files
+        FileOperations fileOperations = new FileOperations();
+        fileOperations.createFile("HowManyRuns.txt");
+
+        //Write the default value to the file
+        fileOperations.writeFile("HowManyRuns.txt", "|");
+
+    }//End createLocalFiles
+
+    public int numberOfRuns (){
+        //Get the number of runs
+        FileOperations fileOperations = new FileOperations();
+        String data = fileOperations.readFile("HowManyRuns.txt");
+        return data.length();
+    }
     //Database settings
 }//End class
 
